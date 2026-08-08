@@ -1,0 +1,24 @@
+name: Combined Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Fetches the current and previous commit so we can compare
+
+      - name: Normal build/test step
+        run: echo "Running standard build and tests for all files..."
+
+      - name: Run extra step ONLY if README changed
+        if: contains(github.event.head_commit.modified, 'README.md') || contains(github.event.head_commit.added, 'README.md')
+        run: |
+          echo "README.md was updated in this push!"
+          echo "Running your extra special README step here..."
