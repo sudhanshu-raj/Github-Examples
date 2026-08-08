@@ -10,6 +10,7 @@ on:
 jobs:
   hello_world:
     runs-on: ubuntu-latest
+    name: Job to know multievent flow
     steps:
       - name: "Echo Basic Information"
         run: |
