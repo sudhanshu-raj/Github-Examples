@@ -1,0 +1,33 @@
+name: PR Title Prefixer
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  prefix-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check and Update PR Title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            
+            // Check if title contains 'fix' (case-insensitive) and doesn't already start with '[fix]'
+            if (/fix/i.test(title) && !title.toLowerCase().startsWith('[fix]')) {
+              // Clean up 'fix' if it's already floating around and prepend [fix] cleanly
+              const cleanTitle = title.replace(/fix/gi, '').trim();
+              const newTitle = `[fix] ${cleanTitle}`;
+              
+              console.log(`Updating PR title from "${title}" to "${newTitle}"`);
+              
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                title: newTitle
+              });
+            } else {
+              console.log("No update needed for PR title.");
+            }

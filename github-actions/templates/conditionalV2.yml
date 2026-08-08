@@ -1,0 +1,33 @@
+name: Test README Condition
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if README changed
+        id: check-readme
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q "^README.md$"; then
+            echo "readme_changed=true" >> $GITHUB_OUTPUT
+            echo "MATCH: README changed!"
+          else
+            echo "readme_changed=false"
+            echo "NO MATCH: README did not change."
+          fi
+
+      - name: This runs EVERY time
+        run: echo "Hello! I run on every single push."
+
+      - name: This runs ONLY when README changes
+        if: steps.check-readme.outputs.readme_changed == 'true'
+        run: echo "SUCCESS! The extra step ran because you updated README.md!"

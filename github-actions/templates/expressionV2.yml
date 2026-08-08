@@ -1,0 +1,27 @@
+name: Test Expression Functions
+
+on:
+  workflow_dispatch: # Allows you to trigger this manually from the GitHub UI
+
+jobs:
+  test-expressions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test String Functions
+        run: |
+          echo "Contains 'llo' in 'Hello world': ${{ contains('Hello world', 'llo') }}"
+          echo "Starts with 'He': ${{ startsWith('Hello world', 'He') }}"
+          echo "Ends with 'ld': ${{ endsWith('Hello world', 'ld') }}"
+
+      - name: Test Formatting
+        run: |
+          echo "${{ format('Hello {0} {1}!', 'Developer', 'GitHub Actions') }}"
+
+      - name: Test JSON Conversion
+        run: |
+          echo "Job Name as JSON: ${{ toJSON(github.job) }}"
+          echo "Parsed JSON Value: ${{ fromJSON('{"status":"active"}').status }}"
+
+      - name: Test Status Functions (Always true in normal run)
+        if: ${{ success() }}
+        run: echo "Previous steps succeeded, so this runs!"
