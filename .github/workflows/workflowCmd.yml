@@ -12,4 +12,12 @@ jobs:
           echo "Compiling code..."
           echo "Running internal checks..."
           echo "::endgroup::"
+      
+      - name: "step 1"
+        run: |
+          echo "MY_VAL=hello" >> $GITHUB_ENV
+      - name: "step 2"
+        run: |
+          echo "cuurent MY_VAL value is $MY_VAL"
+
   
