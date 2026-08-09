@@ -1,0 +1,17 @@
+name: jobs-demo
+
+on: ["push"]
+
+jobs:
+  name: "jobs-test"
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: step actions
+        run: echo "Hello  ubuntu world"
+  job1:
+    runs-on: macos-latest
+    steps:
+      - name: Step b 
+        run: echo "Hello macci"
